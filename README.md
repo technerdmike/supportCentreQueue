@@ -66,6 +66,10 @@ NOTE: This application is developed for and runs on an Amazon EC2 Ubuntu 18.04 s
    ```
 3. Digital Ocean has a comprehensive tutorial to install Python Flask applications found [here](https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04).
     * If you have a domain, ensure that the domain points to your server's IP address.
+    * NOTE: in the virtual environment, install all python modules using the following code:
+      ```
+      pip install requirements.txt
+      ```
 4. Head to the site's page and the setup will begin!
 5. Once setup is complete, reboot the server
 ## Deploying
