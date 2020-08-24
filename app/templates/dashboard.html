@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block metas %}
+<!--<meta http-equiv="refresh" content="10">-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script type=text/javascript src="{{ url_for('static', filename='js/teacherInactivityRefresh.js') }}"></script>
+{% endblock %}
+
+{% block pageName %}
+Dashboard
+{% endblock %}
+
+{% block jumbotron %}
+    {% include 'nav.html' %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <table class="table table-striped">
+        <tr>
+            <th>
+                Student
+            </th>
+            <th>
+                Location
+            </th>
+            <th>
+                Subject
+            </th>
+            <th>
+                Support
+            </th>
+        </tr>
+        {% for student in students %}
+            <tr class="form-group">
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+
+                    <td class="pd-md-2">
+                        {{ form.timestamp(value=student.timestamp, type="hidden") }}
+                        {{ form.studentID(value=student.studentID, type="hidden") }}
+                        {{ form.location(value=student.location, type="hidden") }}
+                        {{ form.selectedSubject(value=student.selectedSubjectCode, type="hidden") }}
+                        <a href="/students/{{ student.studentID }}">{{ student.firstName }} {{ student.lastName }}</a>
+                    </td>
+                    <td>
+                        {{ student.location }}
+                    </td>
+                    <td>
+                        {% if student.selectedSubjectCode == None %}
+                            {{ form.subject(class_="form-control") }}
+                        {% else %}
+                            {{ student.selectedSubjectName }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ form.helped(class_="btn btn-success") }} {{ form.notHelped(class_="btn btn-danger") }}
+                        {% if student.selectedSubjectCode == None %}
+                            {{ form.left(class_="btn btn-dark") }}
+                        {% else %}
+                            {{ form.noResponse(class_="btn btn-dark") }}
+                        {% endif %}
+                    </td>
+                </form>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

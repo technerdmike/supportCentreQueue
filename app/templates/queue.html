@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Queue
+{% endblock %}
+
+{% block metas %}
+<meta http-equiv="refresh" content="5">
+{% endblock %}
+
+{% block body_classes %}
+overflow-hidden
+{% endblock %}
+
+{% block jumbotron_classes %}
+bg-color-1 text-light
+{% endblock %}
+
+{% block pageName %}
+Queue
+{% endblock %}
+
+{% block jumbotron %}
+    {% include 'closed.html' %}
+    <div class="row text-center text-lg-left">
+        <div class="col-12 col-lg-6">
+
+            <table class="table table-borderless text-light">
+                <th class="h2">STUDENTS</th>
+                    {% if students|length == 0 %}
+                        <tr>
+                            <td class="display-1 font-weight-bold">
+                                0
+                            </td>
+                        </tr>
+                    {% else %}
+                        {% for student in students %}
+                            <tr>
+                                <td class="h3">
+                                    {{ student }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+            </table>
+        </div>
+        <div class="col-12 col-lg-6">
+            <table class="table table-borderless text-light">
+                <th class="h2">TEACHERS</th>
+                    {% if teachers|length == 0 %}
+                            <tr>
+                                <td class="h3">
+                                    None
+                                </td>
+                            </tr>
+                        {% else %}
+                            {% for teacher in teachers %}
+                            <tr>
+                                <td class="h3">
+                                    {{ teacher.subject }} ( x{{ teacher.available }} )
+                                </td>
+                            </tr>
+                            {% endfor %}
+                    {% endif %}
+            </table>
+        </div>
+
+    </div>
+{% endblock %}

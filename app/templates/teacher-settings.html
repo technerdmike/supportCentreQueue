@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Teacher Settings
+{% endblock %}
+
+{% block pageName %}
+Teacher Settings
+{% endblock %}
+
+{% block jumbotron %}
+    {% include 'nav.html' %}
+    <div class="alert alert-warning">
+        NOTE: This page does not update unless manually refreshed!
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form action="" method="post" class="mb-1" novalidate>
+        {{ centerForm.hidden_tag() }}
+        <span class="h4">{{ siteName }}: </span>
+        {% if not closed %}
+            {{ centerForm.openButton(class="btn btn-success disabled") }} {{ centerForm.closeButton(class="btn btn-light") }}
+        {% elif closed %}
+            {{ centerForm.openButton(class="btn btn-light") }} {{ centerForm.closeButton(class="btn btn-danger disabled") }}
+        {% else %}
+            <div class="alert alert-danger">
+                Something is wrong with the On/Off buttons!
+            </div>
+        {% endif %}
+    </form>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <table class="table form-group">
+            <th class="h2 ">Available Teachers</th>
+            <tr>
+                <th>
+                    Subject
+                </th>
+                <th>
+                    Teachers Available
+                </th>
+            </tr>
+                {% for subject in form.subjectsAvailable %}
+                    {{ subject.hidden_tag() }}
+                    {# if statement below is to prevent teachers from choosing the 'Not Applicable' Subject #}
+                    {% if names[loop.index0].name != 'Not Applicable' %}
+
+                        <tr>
+                            <td >
+                                {{ names[loop.index0].name }}
+                            </td>
+                            <td>
+                                {{ subject.numberMenu(class_="form-control") }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+        </table>
+        {{ form.submit(class_="btn btn-color-1")}} {{ form.clearAll(class_="btn btn-danger")}}
+    </form>
+
+{% endblock %}

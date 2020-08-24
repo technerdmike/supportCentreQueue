@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Student Lookup
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block pageName %}
+Student Lookup
+{% endblock %}
+
+{% block jumbotron %}
+    {% include 'nav.html' %}
+    <form action="" method="post" class="text-center" novalidate>
+        {{ form.hidden_tag() }}
+        {{ form.studentID.label }} {{ form.studentID(size=16) }} {{ form.submit(class_="btn btn-color-1") }}
+        {% for error in form.studentID.errors %}
+        <br><span class="text-danger">{{ error }}</span>
+        {% endfor %}
+    </form>
+    {% if results|length != 0 %}
+    <h1 class="h1">{{ studentName.first }} {{ studentName.last }}</h1>
+    <table class="table table-striped">
+        <tr>
+            <th>
+                Date and Time
+            </th>
+            <th>
+                Location
+            </th>
+            <th>
+                Subject
+            </th>
+            <th>
+                Support Received
+            </th>
+        </tr>
+        {% for info in results %}
+            <tr>
+                <td>
+                    {{ info.timestamp }}
+                </td>
+                <td>
+                    {{ info.location }}
+                </td>
+                <td>
+                    {{ info.subject }}
+                </td>
+                {% if info.support == 'HELPED' %}
+                <td class="bg-success font-weight-bold">
+                {% elif info.support == 'NOT HELPED' %}
+                <td class="bg-danger font-weight-bold">
+                {% elif info.support == 'LEFT' or info.support == 'NO RESPONSE'%}
+                <td class="bg-warning font-weight-bold">
+                {% else %}
+                <td class="font-weight-bold">
+                {% endif %}
+                    {{ info.support }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+{% endblock %}

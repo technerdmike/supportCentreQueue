@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Admin Settings
+{% endblock %}
+
+{% block pageName %}
+Administrator Settings
+{% endblock %}
+
+{% block jumbotron %}
+    {% include 'nav.html' %}
+    <div class="alert alert-warning">
+        NOTE: This page does not update unless manually refreshed!
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% if changeAdminPass.updatePassword.newPassword.errors|length > 0 or changeTeacherPass.updatePassword.newPassword.errors|length > 0 %}
+        <div class="alert alert-danger" role="alert">Passwords do not match!</div>
+    {% endif %}
+    <h2 class="h2">Enroll a New Student</h2>
+    <form action="" method="post" class="mb-1" novalidate>
+        {{ enrollStudent.hidden_tag() }}
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    {{ enrollStudent.studentID.label }}: {{ enrollStudent.studentID(class_="form-control") }}
+                    {% for error in enrollStudent.studentID.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+                <div class="col">
+                    {{ enrollStudent.firstName.label }}: {{ enrollStudent.firstName(class_="form-control") }}
+                    {% for error in enrollStudent.firstName.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+                <div class="col">
+                    {{ enrollStudent.lastName.label }}: {{ enrollStudent.lastName(class_="form-control") }}
+                    {% for error in enrollStudent.lastName.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+                <div class="col">
+                    {{ enrollStudent.gradeLevel.label }}: {{ enrollStudent.gradeLevel(class_="form-control") }}
+                    {% for error in enrollStudent.gradeLevel.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <br> {{ enrollStudent.submit(class="btn btn-color-1") }}
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <hr class="hr-color-2">
+    <h2>Upload Student Information file</h2>
+    <form action="" method="post" class="mb-1" enctype="multipart/form-data" novalidate>
+        {{ uploadCSV.hidden_tag() }}
+        <div class="container">
+            <div class="alert alert-info" role="alert">
+                CSV file should have columns in the order of Student ID, First Name, Last Name, Grade Level without headers. <br>
+                <a href="{{ url_for('getCSV') }}" class="btn btn-info mb-1">Sample CSV</a>
+            </div>
+            <div class="row mb-2">
+
+                <div class="col">
+                    {{ uploadCSV.csvFile.label }}
+                </div>
+                <div class="col col-md-9" >
+                    {{ uploadCSV.csvFile(class_="form-control-file") }}
+                    {% for error in uploadCSV.csvFile.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    {{ uploadCSV.submitUpload(class_="btn btn-color-1") }}
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <hr class="hr-color-2">
+    <h2>Upload Student Photos archive</h2>
+    <form action="" method="post" class="mb-1" enctype="multipart/form-data" novalidate>
+        {{ uploadZip.hidden_tag() }}
+        <div class="container">
+            <div class="alert alert-info" role="alert">
+                ZIP file should only contain jpg images with the Student ID as the filename. (i.e. 12345678.jpg)
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    {{ uploadZip.zipFile.label }}
+                </div>
+                <div class="col col-md-9" >
+                    {{ uploadZip.zipFile(class_="form-control-file") }}
+                    {% for error in uploadZip.zipFile.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    {{ uploadZip.uploadZip(class_="btn btn-color-1") }}
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <hr class="hr-color-2">
+    <h2>Change Passwords</h2>
+    <div class="container">
+        <div class="alert alert-danger" role="alert">
+            DO NOT FORGET THE NEW PASSWORD! There is no way of recovering or overwriting forgotten passwords!
+        </div>
+    </div>
+    <h4>Admin Password</h4>
+    <form action="" method="post" class="mb-1" novalidate>
+        {{ changeAdminPass.hidden_tag() }}
+        {{ changeAdminPass.updatePassword.hidden_tag() }}
+        <div class="container">
+            {% for item in changeAdminPass.updatePassword %}
+                {% if loop.index != changeAdminPass.updatePassword.data|length %}
+                    <div class="row mb-2">
+                        <div class="col">
+                            {{ item.label }}
+                        </div>
+                        <div class="col col-md-9" >
+                            {{ item(class_="form-control") }}
+                            {% for error in item.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div class="row mb-2">
+                <div class="col">
+                    {{ changeAdminPass.submitAdminPassword(class_="btn btn-color-1") }}
+                </div>
+            </div>
+        </div>
+    </form>
+    <hr>
+    <h4 class="h4">Teacher Password</h4>
+    <form action="" method="post" class="mb-1" novalidate>
+        {{ changeTeacherPass.hidden_tag() }}
+        {{ changeTeacherPass.updatePassword.hidden_tag() }}
+        <div class="container">
+            {% for item in changeTeacherPass.updatePassword %}
+                {% if loop.index != changeTeacherPass.updatePassword.data|length %}
+                    <div class="row mb-2">
+                        <div class="col">
+                            {{ item.label }}
+                        </div>
+                        <div class="col col-md-9" >
+                            {{ item(class_="form-control") }}
+                            {% for error in item.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div class="row mb-2">
+                <div class="col">
+                    {{ changeTeacherPass.submitTeacherPassword(class_="btn btn-color-1") }}
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <hr class="hr-color-2">
+    <h2 class="h2">Site Settings</h2>
+    <form action="" method="post" class="mb-1" enctype="multipart/form-data" novalidate>
+        {{ siteSettings.hidden_tag() }}
+        <div class="container">
+            <div class="row mb-2">
+                <div class="col">
+                    {{ siteSettings.siteName.label }}
+                </div>
+                <div class="col col-md-9">
+                    {{ siteSettings.siteName(class_="form-control", value=siteName) }}
+                    {% for error in siteSettings.siteName.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    {{ siteSettings.institutionName.label }}
+                </div>
+                <div class="col col-md-9">
+                    {{ siteSettings.institutionName(class_="form-control", value=institutionName) }}
+                    {% for error in siteSettings.institutionName.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    {{ siteSettings.institutionAbbrev.label }}
+                </div>
+                <div class="col col-md-9">
+                    {{ siteSettings.institutionAbbrev(class_="form-control", value=institutionAbbrev) }}
+                    {% for error in siteSettings.institutionAbbrev.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    {{ siteSettings.color1.label }}
+                </div>
+                <div class="col col-md-9">
+                    {{ siteSettings.color1(class_="form-control", value=color1) }}
+                    {% for error in siteSettings.color1.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    {{ siteSettings.color2.label }}
+                </div>
+                <div class="col col-md-9">
+                    {{ siteSettings.color2(class_="form-control", value=color2) }}
+                    {% for error in siteSettings.color2.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    {{ siteSettings.colorBG.label }}
+                </div>
+                <div class="col col-md-9">
+                    {{ siteSettings.colorBG(class_="form-control", value=colorBG) }}
+                    {% for error in siteSettings.colorBG.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    {{ siteSettings.siteLogo.label }}<br>
+                </div>
+                <div class="col col-md-9">
+                    {{ siteSettings.siteLogo(class_="form-control-file") }}
+                    {% for error in siteSettings.siteLogo.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                    <span class="text-secondary">Logo image should be png format with 256 x 256px dimensions.</span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    {{ siteSettings.siteFavicon.label }}<br>
+                </div>
+                <div class="col col-md-9">
+                    {{ siteSettings.siteFavicon(class_="form-control-file") }}
+                    {% for error in siteSettings.siteFavicon.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                    <span class="text-secondary">Favicon image should be png format with 32 x 32px dimensions.</span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    {{ siteSettings.saveChanges(class_="btn btn-color-1") }}
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+
+{% endblock %}
+

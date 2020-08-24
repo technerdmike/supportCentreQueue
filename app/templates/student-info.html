@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Student Info
+{% endblock %}
+
+{% block jumbotron_classes %}
+text-center
+{% endblock %}
+
+{% block pageName %}
+Teacher Dashboard
+{% endblock %}
+
+{% block jumbotron %}
+    <div class="alert alert-warning" role="alert">
+        Click/tap image to return to Dashboard
+    </div>
+    <h1>{{ student.firstName }} {{ student.lastName }}</h1>
+    <h2>{{ student.id }}</h2>
+    {% set studentImage = 'students/' ~ student.id ~ '.jpg' %}
+    <a href="{{ url_for('teachers') }}" ><img src="{{ url_for('static', filename=studentImage) }} "></a>
+    <h2>Gr. {{ student.gradeLevel }}</h2>
+{% endblock %}

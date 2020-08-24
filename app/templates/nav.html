@@ -1,0 +1,17 @@
+<nav class="nav nav-pills flex-column flex-sm-row mb-lg-2">
+    {% for item in nav.top %}
+        {% if current_user.username == "admin" %}
+            <a href="{{ item.url }}" class="flex-sm-fill text-sm-center nav-link mb-1 mb-lg-0 btn {{ 'mr-md-3 mr-sm-1' if loop.index != nav.top.items|length else '' }} {{ 'active btn-color-1 disabled' if item.is_active else 'text-danger' if item.label == 'Logout' else 'btn-grey' }}">{{ item.label }}</a>
+        {% else %}
+            {% if item.label != "Admin Settings" %}
+                <a href="{{ item.url }}" class="flex-sm-fill text-sm-center nav-link mb-1 mb-lg-0 btn {{ 'mr-md-3 mr-sm-1' if loop.index != nav.top.items|length else '' }} {{ 'active btn-color-1 disabled' if item.is_active else 'text-danger' if item.label == 'Logout' else 'btn-grey' }}">{{ item.label }}</a>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</nav>
+{% if closed %}
+    <div class="alert alert-danger">
+        Support Center is currently CLOSED! Go to <a href="{{ url_for('teachers') }}">Teacher Settings</a> to change.
+    </div>
+{% endif %}
+<hr class="hr-color3-2">

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block metas %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script type=text/javascript src="{{ url_for('static', filename='js/inactivityRefresh.js') }}"></script>
+{% endblock %}
+
+{% block pageName %}
+Login
+{% endblock %}
+
+{% block jumbotron %}
+    <div class="container">
+        <div class="row">
+            <div class="col col-md-3">
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.username.label }}<br>
+                        {{ form.username(size=32, class_="form-control") }}<br>
+                        {% for error in form.username.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.password.label }}<br>
+                        {{ form.password(size=32, class_="form-control") }}<br>
+                        {% for error in form.password.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+                    <p>{{ form.submit(class_="form-control btn btn-color-1") }}</p>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

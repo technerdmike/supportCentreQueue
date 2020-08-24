@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Queue Sign In
+{% endblock %}
+
+{% block metas %}
+<!--<meta http-equiv="refresh" content="5">-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script type=text/javascript src="{{ url_for('static', filename='js/onlineInactivityRefresh.js') }}"></script>
+{% endblock %}
+
+{% block pageName %}
+Queue Online Sign In
+{% endblock %}
+
+{% block jumbotron %}
+    {% include 'closed.html' %}
+    {% if not closed %}
+        <div class="alert alert-info text-center" role="alert">
+            <h4 class="mb-0">An teacher will contact you through <a href="https://chat.google.com" target="_blank" class="text-uppercase">Google Chat</a> when available. </h4><br>
+            <a href='https://play.google.com/store/apps/details?id=com.google.android.apps.dynamite' target="_blank"><img alt='Get it on Google Play' src="{{ url_for('static', filename='media/en_badge_web_generic.png') }}" class="w-md-25 w-50"/></a>
+            <a href='https://apps.apple.com/us/app/google-chat/id1163852619' target="_blank"><img alt='Get it on Apple App Store' src="{{ url_for('static', filename='media/app-store-badge.png') }}" class="w-md-25 w-50"/></a>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="text-center form-group d-flex p-2 justify-content-center">
+            <form action="" method="post" >
+                {{ form.hidden_tag() }}
+                <p>
+                    <h2>{{ form.studentID.label }}</h2><br>
+                        {{ form.studentID(size=12, class_="form-control") }}<br>
+                        {% for error in form.studentID.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                        {% endfor %}
+                    <h2>{{ form.subject.label }}</h2><br>
+                        {{ form.subject(class_="form-control text-center mb-5") }}
+                        {{ form.submit(class_="form-control btn btn-color-1") }}
+                </p>
+                <p>Please Enter your Student ID.</p>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}
